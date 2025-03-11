@@ -41,11 +41,12 @@ const ListTodos = ({ allTodos, setTodosChange }) => {
 
     return <>
         <table className='table  mt-5 text-center'>
-        <thead>
+        <thead className='thead-dark'>
         <tr>
-            <th>Description</th>
-            <th>Edit</th>
-            <th>Delete</th>
+            <th className='text-center'>Description</th>
+            <th className='text-center'>Due Date</th>
+            <th className='text-center'>Edit</th>
+            <th className='text-center'>Delete</th>
         </tr>
         </thead>
         <tbody>
@@ -58,6 +59,7 @@ const ListTodos = ({ allTodos, setTodosChange }) => {
             {todos.length !== 0 && todos[0].todo_id !== null && todos.map(todo => (
                <tr key={todo.todo_id}>
                     <td>{todo.description}</td>
+                    <td>{new Date(todo.due_date).toLocaleString()}</td>
                     <td><EditTodo todo={todo} setTodosChange={setTodosChange}/></td>
                     <td>
                         <button className='btn btn-danger' onClick={() => deleteTodo(todo.todo_id)}>Delete</button>

@@ -44,15 +44,19 @@ const Dashboard = ({ setAuth }) => {
 
   return (
     <div>
-        <div className='d-flex mt-5 justify-content-around'>
-            <h2>{name} 's Todo List</h2>
-            <button onClick={e => logout(e)} className='btn btn-dark'>
+        {/* Header Section */}
+        <header className="d-flex justify-content-between align-items-center p-4 bg-light border-bottom">
+            <h2>{name}'s Todo List</h2>
+            <button onClick={logout} className="btn btn-dark">
                 Logout
             </button>
-        </div>
-        <InputTodo setTodosChange={setTodosChange}/>
-        <ListTodos allTodos={allTodos} setTodosChange={setTodosChange} />
-      
+        </header>
+
+        {/* Main Content */}
+        <main className="p-3">
+            <InputTodo setTodosChange={setTodosChange} />
+            <ListTodos allTodos={allTodos} setTodosChange={setTodosChange} />
+        </main>
     </div>
   )
 }
