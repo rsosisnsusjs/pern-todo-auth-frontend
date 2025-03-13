@@ -30,7 +30,6 @@ const InputTodo = ({ setTodosChange }) => {
             setTodosChange(true);
             setDescription('');
             setDueDate('');
-            //window.location = '/';
         } catch (err) {
             console.error(err.message);
         }
@@ -42,22 +41,22 @@ const InputTodo = ({ setTodosChange }) => {
 
     return (
         <>
-        <h1 className='text-center mt-5'> Todo List</h1>
         <form className='d-flex flex-row align-items-center gap-3 mt-5' onSubmit={onSubmitForm}>
             <input
                 type='text'
                 className='form-control mb-2'
                 value={description}
-                onChange={e => setDescription(e.target.value)}/>
+                onChange={e => setDescription(e.target.value)}
+                placeholder='add todo here...'/>
             <input 
                 type="datetime-local"
-                className="form-control mb-2 w-25 p-3"
+                className="form-control mb-2 w-25 p-3 ml-2"
                 value={due_date}
                 onChange={e => setDueDate(e.target.value)}
                 min={minDateTimeISO}
                 />
             
-            <button className='btn btn-dark'>Add</button>
+            <button className='btn btn-dark mb-2 ml-2'>Add</button>
         </form>
         </>
     )

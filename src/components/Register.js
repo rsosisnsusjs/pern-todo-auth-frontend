@@ -45,7 +45,7 @@ const Register = ({ setAuth }) => {
 
   return (
     <>
-      <h1 className="mt-5 text-center">Register</h1>
+      <h1 className="mt-5 text-center">REGISTER</h1>
       <form onSubmit={onSubmitForm}>
         <input
           type="text"
