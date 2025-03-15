@@ -3,12 +3,11 @@ import EditTodo from "./editTodo";
 
 const ListTodos = ({ allTodos, setTodosChange }) => {
   const [todos, setTodos] = useState([]);
+  const [doneTodos, setDoneTodos] = useState([]); 
+  const [searchTerm, setSearchTerm] = useState('');
 
   const deleteTodo = async (id) => {
-    if (!id) {
-      console.error("Invalid todo_id: ", id);
-      return; // Prevent delete request if id is null/undefined
-    }
+    if (!id) return;
 
     const confirmDelete = window.confirm("Are you sure you want to delete this task?");
     if (!confirmDelete) return;
@@ -20,7 +19,7 @@ const ListTodos = ({ allTodos, setTodosChange }) => {
       });
 
       if (response.ok) {
-        setTodos(todos.filter((todo) => todo.todo_id !== id)); // Update state
+        setTodos(todos.filter((todo) => todo.todo_id !== id));
       } else {
         console.error("Failed to delete todo:", await response.text());
       }
@@ -29,13 +28,44 @@ const ListTodos = ({ allTodos, setTodosChange }) => {
     }
   };
 
+  const markAsDone = async (todo) => {
+    if (!todo || !todo.todo_id) return;
+
+    try {
+      const response = await fetch(`http://localhost:5000/dashboard/done`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          jwt_token: localStorage.token,
+        },
+        body: JSON.stringify({
+          todo_id: todo.todo_id,
+          description: todo.description,
+          due_date: todo.due_date,
+        }),
+      });
+
+      if (response.ok) {
+        setTodos(todos.filter((t) => t.todo_id !== todo.todo_id));
+        setDoneTodos([...doneTodos, todo]);
+      } else {
+        console.error("Failed to mark as done:", await response.text());
+      }
+    } catch (err) {
+      console.error("Error marking as done:", err.message);
+    }
+  };
+  
   useEffect(() => {
-    setTodos(allTodos || []); // Initialize with empty array if allTodos is undefined
+    setTodos(allTodos || []); 
   }, [allTodos]);
 
-  const sortedTodos = todos
-    .filter((todo) => todo.due_date) // Skip todos with missing or null due_date
-    .sort((a, b) => new Date(a.due_date) - new Date(b.due_date)); // Sort todos by due date
+  const filteredAndSortedTodos = todos
+    .filter((todo) =>
+      todo.description.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    .filter((todo) => todo.due_date)
+    .sort((a, b) => new Date(a.due_date) - new Date(b.due_date));; // Sort todos by due date
 
   const getTimeRemaining = (dueDate) => {
     if (!dueDate) return { timeText: "Invalid Date", color: "black" };
@@ -66,6 +96,8 @@ const ListTodos = ({ allTodos, setTodosChange }) => {
 
   return (
     <>
+
+      {/* Todo List */}
       <table className="table mt-5 text-center">
         <thead className="thead-dark">
           <tr>
@@ -73,12 +105,13 @@ const ListTodos = ({ allTodos, setTodosChange }) => {
             <th className="text-center">Due Date</th>
             <th className="text-center">Time Remaining</th>
             <th className="text-center">Edit</th>
+            <th className="text-center">Done</th>
             <th className="text-center">Delete</th>
           </tr>
         </thead>
         <tbody>
-          {sortedTodos.length > 0 ? (
-            sortedTodos.map((todo) => {
+          {filteredAndSortedTodos.length > 0 ? (
+            filteredAndSortedTodos.map((todo) => {
               const { timeText, color } = getTimeRemaining(todo.due_date);
               return (
                 <tr key={todo.todo_id}>
@@ -97,6 +130,14 @@ const ListTodos = ({ allTodos, setTodosChange }) => {
                   <td>
                     <EditTodo todo={todo} setTodosChange={setTodosChange} />
                   </td>
+                  <td>
+                  <button
+                    className="btn btn-success"
+                    onClick={() => markAsDone(todo)} 
+                  >
+                    Done
+                  </button>
+                </td>
                   <td>
                     <button
                       className="btn btn-danger"

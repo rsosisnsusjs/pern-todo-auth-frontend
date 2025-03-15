@@ -45,7 +45,7 @@ const Register = ({ setAuth }) => {
 
   return (
     <>
-      <h1 className="mt-5 text-center">REGISTER</h1>
+      <h1 className="mt-5 text-center"><strong>REGISTER</strong></h1>
       <form onSubmit={onSubmitForm}>
         <input
           type="text"
@@ -71,9 +71,10 @@ const Register = ({ setAuth }) => {
           onChange={e => onChange(e)}
           className="form-control my-3"
         />
-        <button className="btn btn-success btn-block">Submit</button>
+        <button className="btn btn-dark btn-block">Submit</button>
       </form>
       <Link to="/login">login</Link>
+      
     </>
   )
 }

@@ -36,3 +36,17 @@
     transform: rotate(360deg);
   }
 }
+
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap');
+
+.todo-list-header {
+  font-family: 'Lexend', sans-serif;
+  font-weight: bold;
+  font-style: normal;
+}
+
+.login-header {
+  font-family: 'Lexend', sans-serif;
+  font-weight: bold;
+  font-style: normal;
+}

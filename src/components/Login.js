@@ -45,7 +45,7 @@ const Login = ({ setAuth }) => {
 
   return (
     <>
-      <h1 className='mt-5 text-center'>LOGIN</h1>
+      <h1 className='login-header mt-5 text-center'><strong>LOGIN</strong></h1>
       <form onSubmit={onSubmitForm}>
         <input
           type='text'
