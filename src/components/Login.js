@@ -13,6 +13,56 @@ const Login = ({ setAuth }) => {
   const onChange = e =>
     setInputs({ ...inputs, [e.target.name]: e.target.value });
 
+  
+  const getUrgentTodos = async (token) => {
+    try {
+
+        const response = await fetch('http://localhost:5000/dashboard/', {
+            method: 'GET',
+            headers:{
+              "Content-Type": "application/json",
+              jwt_token: localStorage.token,
+            },
+        })
+
+        const todos = await response.json();
+
+
+        const urgentTodos = todos.filter(todo => {
+            if (!todo.due_date) return false;
+            const dueDate = new Date(todo.due_date);
+            const now = new Date();
+            return dueDate - now < 24 * 60 * 60 * 1000; // เหลือน้อยกว่า 1 วัน
+        });
+
+        if (urgentTodos.length > 0) {
+            urgentTodos.forEach(todo => {
+
+              const dueDate = new Date(todo.due_date);
+              const now = new Date();
+              const isOverdue = dueDate < now;
+              
+              if (isOverdue) {
+                toast.error(`Task "${todo.description}" is overdue!`, {
+                    autoClose: false,
+                    closeOnClick: true,
+                });
+            } else {
+                toast.warning(`Task "${todo.description}" is due soon!`, {
+                    autoClose: false,
+                    closeOnClick: true,
+                });
+            }
+            })
+        }
+    } catch (err) {
+        console.error('Error fetching todos:', err.message);
+    }
+};
+
+
+
+
   const onSubmitForm = async e => {
     e.preventDefault();
     try {
@@ -33,7 +83,10 @@ const Login = ({ setAuth }) => {
       if (parseRes.jwtToken) {
         localStorage.setItem('token', parseRes.jwtToken);
         setAuth(true);
-        toast.success('Logged in Successfully');
+        toast.success('Logged in Successfully', {autoClose: 1000});
+
+        await getUrgentTodos(parseRes.jwtToken);
+
       } else {
         setAuth(false);
         toast.error(parseRes);

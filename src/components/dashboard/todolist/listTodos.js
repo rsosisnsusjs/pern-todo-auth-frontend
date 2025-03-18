@@ -79,14 +79,27 @@ const ListTodos = ({ allTodos, setTodosChange }) => {
     }
 
     const daysRemaining = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+
     const hoursRemaining = Math.floor(
       (timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
     );
 
+    const minutesRemaining = Math.floor(
+      (timeRemaining % (1000 * 60 * 60)) / (1000 * 60)
+    );
+
     let color = "black";
+
+    /*
+    if (timeRemaining < 60 * 60 * 1000) {
+      color = "red"; // Red for urgent tasks
+      return { timeText: `${minutesRemaining}m !!`, color };
+    }
+      */
+
     if (timeRemaining < 24 * 60 * 60 * 1000) {
       color = "red"; // Red for urgent tasks
-      return { timeText: `${daysRemaining}d ${hoursRemaining}h !!`, color };
+      return { timeText: `${hoursRemaining}h ${minutesRemaining}m !!`, color };
     } else if (timeRemaining < 3 * 24 * 60 * 60 * 1000) {
       color = "orange"; // Orange for near deadlines
     }

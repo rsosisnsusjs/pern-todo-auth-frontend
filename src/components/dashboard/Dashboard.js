@@ -32,7 +32,7 @@ const Dashboard = ({ setAuth }) => {
     try {
       localStorage.removeItem('token');
       setAuth(false);
-      toast.success('Logout successfully');
+      toast.success('Logout successfully', {autoClose: 1000});
     } catch (err) {
       console.error(err.message);
     }
