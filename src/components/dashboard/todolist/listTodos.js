@@ -6,6 +6,7 @@ const ListTodos = ({ allTodos, setTodosChange }) => {
   const [doneTodos, setDoneTodos] = useState([]); 
   const [searchTerm, setSearchTerm] = useState('');
 
+  
   const deleteTodo = async (id) => {
     if (!id) return;
 
@@ -20,11 +21,27 @@ const ListTodos = ({ allTodos, setTodosChange }) => {
 
       if (response.ok) {
         setTodos(todos.filter((todo) => todo.todo_id !== id));
+        setTodosChange(true);
       } else {
         console.error("Failed to delete todo:", await response.text());
       }
     } catch (err) {
       console.error("Error deleting todo:", err.message);
+    }
+  };
+
+  const getDoneTodos = async () => {
+    try {
+      const res = await fetch("http://localhost:5000/dashboard/done", {
+        method: "GET",
+        headers: { jwt_token: localStorage.token },
+      });
+
+      const parseData = await res.json();
+      setDoneTodos(parseData); 
+      
+    } catch (err) {
+      console.error("Error fetching done todos:", err.message);
     }
   };
 
@@ -46,8 +63,11 @@ const ListTodos = ({ allTodos, setTodosChange }) => {
       });
 
       if (response.ok) {
+        
         setTodos(todos.filter((t) => t.todo_id !== todo.todo_id));
         setDoneTodos([...doneTodos, todo]);
+        
+        setTodosChange(true);
       } else {
         console.error("Failed to mark as done:", await response.text());
       }
@@ -55,10 +75,15 @@ const ListTodos = ({ allTodos, setTodosChange }) => {
       console.error("Error marking as done:", err.message);
     }
   };
-  
+
   useEffect(() => {
     setTodos(allTodos || []); 
   }, [allTodos]);
+
+  
+  useEffect(() => {
+    getDoneTodos();
+  }, [setTodosChange]); 
 
   const filteredAndSortedTodos = todos
     .filter((todo) =>
@@ -90,6 +115,7 @@ const ListTodos = ({ allTodos, setTodosChange }) => {
 
     let color = "black";
 
+
     /*
     if (timeRemaining < 60 * 60 * 1000) {
       color = "red"; // Red for urgent tasks
@@ -107,8 +133,18 @@ const ListTodos = ({ allTodos, setTodosChange }) => {
     return { timeText: `${daysRemaining}d ${hoursRemaining}h`, color };
   };
 
+  const totalTodos = todos.length;
+  const doneCount = doneTodos.length;
+  const overdueCount = todos.filter(todo => new Date(todo.due_date) < new Date()).length;
+
   return (
-    <>
+    <>  
+      {/* Task Summary Section */}
+      <div className="d-flex justify-content-center my-3">
+        <h5 className="mx-3">📌 Todos: <span className="text-primary">{totalTodos}</span></h5>
+        <h5 className="mx-3">⚠️ Overdue: <span className="text-danger">{overdueCount}</span></h5>
+        <h5 className="mx-3">✅ Done: <span className="text-success">{doneCount}</span></h5>
+      </div>
 
       {/* Todo List */}
       <table className="table mt-5 text-center">

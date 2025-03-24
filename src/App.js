@@ -8,6 +8,7 @@ import Login from './components/Login';
 import Register from './components/Register';
 import Dashboard from './components/dashboard/Dashboard';
 import Landing from './components/Landing';
+import SummaryPage from "./components/dashboard/todolist/summaryTodos";
 
 function App() {
   console.log("App component loaded");
@@ -44,6 +45,7 @@ function App() {
           <Route path='/login' element={!isAuthenticated ? <Login setAuth={setAuth} /> : <Navigate to='/dashboard' />} />
           <Route path='/register' element={!isAuthenticated ? <Register setAuth={setAuth} /> : <Navigate to='/dashboard' />} />
           <Route path='/dashboard' element={isAuthenticated ? <Dashboard setAuth={setAuth} /> : <Navigate to='/login' />} />
+          <Route path="/summary" element={<SummaryPage />} />
         </Routes>
       </div>
       <ToastContainer />

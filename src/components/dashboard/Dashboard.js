@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import InputTodo from './todolist/inputTodo';
 import ListTodos from './todolist/listTodos';
@@ -11,6 +12,7 @@ const Dashboard = ({ setAuth }) => {
   const [todosChange, setTodosChange] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [view, setView] = useState("todos");
+  
 
   const getProfile = async () => {
     try {
@@ -48,42 +50,46 @@ const Dashboard = ({ setAuth }) => {
 
       {/* Header Section */}
       <header className="d-flex justify-content-between align-items-center p-4 bg-light border-bottom">
-      <h2 className="todo-list-header">
-        <strong>{name}'s Todo List</strong>
-      </h2>
+        <h2 className="todo-list-header">
+          <strong>{name}'s Todo List</strong>
+        </h2>
+
+        
+
         <div className="d-flex align-items-center">
+          {/* View Toggle Buttons */}
+          <Link to='/summary' className='btn btn-outline-secondary'>Summary</Link>
+          <button
+            className={`btn btn-outline-secondary mx-2`}
+            onClick={() => setView("todos")}
+          >
+            Todos
+          </button>
+          <button
+            className={`btn btn-outline-secondary mx-2`}
+            onClick={() => setView("done")}
+          >
+            Done Todos
+          </button>
+
           {/* Search Bar */}
-          <div className="d-flex justify-content-center mt-3">
-            <input
-              type="text"
-              className="form-control w-100"
-              placeholder="Search todos..." // ช่องสำหรับค้นหา
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)} // อัพเดตคำค้นหา
-            />
-          </div>
+          <input
+            type="text"
+            className="form-control mx-2"
+            placeholder="Search todos..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+
           <Notification todos={allTodos} />
+
+          {/* Logout Button */}
           <button onClick={handleLogout} className="btn btn-dark ml-3">
             Logout
           </button>
         </div>
       </header>
 
-      {/* View Toggle Buttons */}
-      <div className="d-flex justify-content-around mt-3">
-        <button
-          className={`btn ${view === "todos" ? "btn-dark" : "btn-outline-secondary"}`}
-          onClick={() => setView("todos")}
-        >
-          Todos
-        </button>
-        <button
-          className={`btn ${view === "done" ? "btn-dark" : "btn-outline-secondary"}`}
-          onClick={() => setView("done")}
-        >
-          Done Todos
-        </button>
-      </div>
 
       {/* Main Content */}
       <main className="p-3">
