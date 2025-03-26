@@ -147,15 +147,15 @@ const ListTodos = ({ allTodos, setTodosChange }) => {
       </div>
 
       {/* Todo List */}
-      <table className="table mt-5 text-center">
+      <table className="table mt-5 text-center" style={{ tableLayout: "fixed", width: "100%" }}>
         <thead className="thead-dark">
           <tr>
-            <th className="text-center">Description</th>
-            <th className="text-center">Due Date</th>
-            <th className="text-center">Time Remaining</th>
-            <th className="text-center">Edit</th>
-            <th className="text-center">Done</th>
-            <th className="text-center">Delete</th>
+            <th className="text-center" style={{ width: "30%" }}>Description</th>
+            <th className="text-center" style={{ width: "25%" }}>Due Date</th>
+            <th className="text-center" style={{ width: "20%" }}>Time Remaining</th>
+            <th className="text-center" style={{ width: "10%" }}>Edit</th>
+            <th className="text-center" style={{ width: "10%" }}>Done</th>
+            <th className="text-center" style={{ width: "10%" }}>Delete</th>
           </tr>
         </thead>
         <tbody>
@@ -166,10 +166,10 @@ const ListTodos = ({ allTodos, setTodosChange }) => {
                 <tr key={todo.todo_id}>
                   <td>{todo.description}</td>
                   <td>
-                    {new Date(todo.due_date).toLocaleString("en-US", {
+                    {new Date(todo.due_date).toLocaleString("en-GB", {
                       year: "numeric",
-                      month: "2-digit",
                       day: "2-digit",
+                      month: "2-digit",
                       hour: "2-digit",
                       minute: "2-digit",
                       hour12: true,
@@ -181,7 +181,7 @@ const ListTodos = ({ allTodos, setTodosChange }) => {
                   </td>
                   <td>
                   <button
-                    className="btn btn-success"
+                    className="btn btn-success btn-sm"
                     onClick={() => markAsDone(todo)} 
                   >
                     Done
@@ -189,7 +189,7 @@ const ListTodos = ({ allTodos, setTodosChange }) => {
                 </td>
                   <td>
                     <button
-                      className="btn btn-danger"
+                      className="btn btn-danger btn-sm"
                       onClick={() => deleteTodo(todo.todo_id)}
                     >
                       Delete

@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@testing-library/dom": "^10.4.0",
+    "geckodriver": "^5.0.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.54.2",
@@ -11,13 +12,15 @@
     "react-scripts": "5.0.1",
     "react-toastify": "^11.0.5",
     "recharts": "^2.15.1",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "webdriver-manager": "^12.1.9"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "test2": "react-scripts test",
+    "eject": "react-scripts eject",
+    "test": "mocha --require @babel/register"
   },
   "eslintConfig": {
     "extends": [
@@ -38,9 +41,15 @@
     ]
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.26.9",
+    "@babel/preset-react": "^7.26.3",
+    "@babel/register": "^7.25.9",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.2.0",
     "@testing-library/user-event": "^14.6.1",
-    "jest": "^27.5.1"
+    "chromedriver": "^134.0.5",
+    "jest": "^27.5.1",
+    "mocha": "^11.1.0",
+    "selenium-webdriver": "^4.30.0"
   }
 }

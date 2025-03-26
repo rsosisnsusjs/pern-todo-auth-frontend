@@ -9,35 +9,41 @@ const SummaryPage = () => {
     overdueCount: 0,
   });
   const [selectedRange, setSelectedRange] = useState("monthly");
+  const [chartLimit, setChartLimit] = useState(10);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchSummary = async () => {
-      try {
-        const res = await fetch("http://localhost:5000/dashboard/summary", {
-          method: 'GET',
-          headers: {
-            jwt_token: localStorage.token,
-          },
-        });
+        try {
+            const res = await fetch(`http://localhost:5000/dashboard/summary?range=${selectedRange}`, {
+                method: 'GET',
+                headers: { jwt_token: localStorage.token },
+            });
 
-        // ตรวจสอบว่า response มีค่าหรือไม่
-        if (res.ok) {
-          const parseData = await res.json();
-          console.log("Summary Data:", parseData);  // ตรวจสอบค่าที่ได้รับจาก API
-          setSummary(parseData); // ตั้งค่าข้อมูลจาก API
-        } else {
-          console.error("Failed to fetch data");
+            if (res.ok) {
+                const parseData = await res.json();
+                console.log("Summary Data:", parseData);
+                setSummary(parseData);
+                
+                if (parseData.totalTodos > chartLimit) {
+                    let newLimit = chartLimit;
+                    while (newLimit < parseData.totalTodos) {
+                        newLimit *= 2;
+                    }
+                    setChartLimit(newLimit);
+                }
+            } else {
+                console.error("Failed to fetch data");
+            }
+        } catch (err) {
+            console.error("Error fetching summary:", err.message);
         }
-      } catch (err) {
-        console.error("Error fetching summary:", err.message);
-      }
     };
 
     fetchSummary();
-  }, []);
+}, [chartLimit, selectedRange]); 
 
-  // ตรวจสอบค่าที่ได้รับจาก API เพื่อแสดงกราฟ
+
   const chartData = [
     { name: "Total Todos", count: summary.totalTodos, color: "#007bff" },
     { name: "Overdue", count: summary.overdueCount, color: "#dc3545" },
@@ -76,7 +82,7 @@ const SummaryPage = () => {
           <BarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />
-            <YAxis />
+            <YAxis domain={[0, chartLimit]} /> {/* กำหนดขอบเขต y-axis */}
             <Tooltip />
             <Bar dataKey="count" fill={(entry) => entry.color} barSize={60} />
           </BarChart>
