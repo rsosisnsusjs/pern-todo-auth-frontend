@@ -6,18 +6,28 @@ describe("Landing Page Test", function () {
 
     // เริ่มต้นเมื่อเริ่มการทดสอบ
     before(async function () {
-        driver = await new Builder().forBrowser("chrome").build();
+        this.timeout(5000);  // เพิ่มเวลาให้พอสำหรับการสร้าง driver
+        try {
+            driver = await new Builder().forBrowser("chrome").build();
+        } catch (err) {
+            console.error("Error in creating driver: ", err);
+            throw err;  // ถ้ามีข้อผิดพลาดในการสร้าง driver จะหยุดการทดสอบ
+        }
     });
 
     // ปิดการทดสอบ
     after(async function () {
-        await driver.quit();
+        if (driver) {
+            try {
+                await driver.quit();  // ทำการปิด driver
+            } catch (err) {
+                console.error("Error in quitting driver: ", err);
+            }
+        }
     });
 
     it("should display Login and Register buttons", async function () {
-        await driver.get("http://localhost:3000"); // เปลี่ยน URL ตามโปรเจกต์ของเบนซ์
-
-        // รอจนกว่าปุ่ม Login จะปรากฏ
+        await driver.get("http://localhost:3000");  // ตรวจสอบว่า driver สามารถเปิด URL ได้
         let loginButton = await driver.wait(
             until.elementLocated(By.linkText("Login")),
             5000
@@ -35,9 +45,10 @@ describe("Landing Page Test", function () {
     it("should navigate to Login page when Login button is clicked", async function () {
         let loginButton = await driver.findElement(By.linkText("Login"));
         await loginButton.click();
+
+        // รอจนกว่า URL จะเปลี่ยนไปหน้า Login
         await driver.wait(until.urlContains("login"), 5000);
 
-        // ตรวจสอบว่า URL เปลี่ยนไปหน้า Login
         let currentUrl = await driver.getCurrentUrl();
         assert.ok(currentUrl.includes("login"));
     });
@@ -45,9 +56,10 @@ describe("Landing Page Test", function () {
     it("should navigate to Register page when Register button is clicked", async function () {
         let registerButton = await driver.findElement(By.linkText("Register"));
         await registerButton.click();
+
+        // รอจนกว่า URL จะเปลี่ยนไปหน้า Register
         await driver.wait(until.urlContains("register"), 5000);
 
-        // ตรวจสอบว่า URL เปลี่ยนไปหน้า Register
         let currentUrl = await driver.getCurrentUrl();
         assert.ok(currentUrl.includes("register"));
     });

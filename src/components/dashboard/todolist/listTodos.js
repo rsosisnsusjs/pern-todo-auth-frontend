@@ -181,6 +181,7 @@ const ListTodos = ({ allTodos, setTodosChange }) => {
                   </td>
                   <td>
                   <button
+                    name='done_button'
                     className="btn btn-success btn-sm"
                     onClick={() => markAsDone(todo)} 
                   >

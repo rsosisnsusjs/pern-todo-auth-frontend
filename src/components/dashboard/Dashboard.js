@@ -60,12 +60,14 @@ const Dashboard = ({ setAuth }) => {
           {/* View Toggle Buttons */}
           <Link to='/summary' className='btn btn-outline-secondary'>Summary</Link>
           <button
+            name='open_todo_button'
             className={`btn btn-outline-secondary mx-2`}
             onClick={() => setView("todos")}
           >
             Todos
           </button>
           <button
+            name='open_done_button'
             className={`btn btn-outline-secondary mx-2`}
             onClick={() => setView("done")}
           >
