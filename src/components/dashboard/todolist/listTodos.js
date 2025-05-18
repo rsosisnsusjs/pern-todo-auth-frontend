@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
 import EditTodo from "./editTodo";
+import DeleteIcon from '@mui/icons-material/Delete';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import IconButton from '@mui/material/IconButton';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import { Link } from 'react-router-dom';
+
 
 const ListTodos = ({ allTodos, setTodosChange }) => {
   const [todos, setTodos] = useState([]);
@@ -153,9 +160,11 @@ const ListTodos = ({ allTodos, setTodosChange }) => {
             <th className="text-center" style={{ width: "30%" }}>Description</th>
             <th className="text-center" style={{ width: "25%" }}>Due Date</th>
             <th className="text-center" style={{ width: "20%" }}>Time Remaining</th>
-            <th className="text-center" style={{ width: "10%" }}>Edit</th>
-            <th className="text-center" style={{ width: "10%" }}>Done</th>
-            <th className="text-center" style={{ width: "10%" }}>Delete</th>
+            <th className="text-center" style={{ width: "5%" }}></th>
+            <th className="text-center" style={{ width: "5%" }}></th>
+            <th className="text-center" style={{ width: "5%" }}></th>
+            <th className="text-center" style={{ width: "5%" }}></th>
+
           </tr>
         </thead>
         <tbody>
@@ -164,6 +173,7 @@ const ListTodos = ({ allTodos, setTodosChange }) => {
               const { timeText, color } = getTimeRemaining(todo.due_date);
               return (
                 <tr key={todo.todo_id}>
+                  
                   <td>{todo.description}</td>
                   <td>
                     {new Date(todo.due_date).toLocaleString("en-GB", {
@@ -172,7 +182,6 @@ const ListTodos = ({ allTodos, setTodosChange }) => {
                       month: "2-digit",
                       hour: "2-digit",
                       minute: "2-digit",
-                      hour12: true,
                     })}
                   </td>
                   <td style={{ color }}>{timeText}</td>
@@ -180,21 +189,33 @@ const ListTodos = ({ allTodos, setTodosChange }) => {
                     <EditTodo todo={todo} setTodosChange={setTodosChange} />
                   </td>
                   <td>
-                  <button
-                    name='done_button'
-                    className="btn btn-success btn-sm"
-                    onClick={() => markAsDone(todo)} 
-                  >
-                    Done
-                  </button>
-                </td>
-                  <td>
-                    <button
-                      className="btn btn-danger btn-sm"
+                    <IconButton
+                      size="small"
+                      aria-label="delete"
                       onClick={() => deleteTodo(todo.todo_id)}
                     >
-                      Delete
-                    </button>
+                      <DeleteIcon fontSize="medium" />
+                    </IconButton>
+                  </td>
+                  <td>
+                    <IconButton
+                      size="small"
+                      aria-label="view"
+                      component={Link}
+                      to={`/todos/${todo.todo_id}`}
+                    >
+                      <VisibilityIcon fontSize="medium" />
+                    </IconButton>
+                  </td>
+                  <td>
+                      <IconButton
+                        size="small"
+                        aria-label="done"
+                        onClick={() => markAsDone(todo)}
+                      >
+                        <CheckBoxIcon fontSize="medium" />
+                      </IconButton>
+                    
                   </td>
                 </tr>
               );

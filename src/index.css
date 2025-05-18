@@ -402,3 +402,23 @@ footer {
     font-size: 1.5rem;
   }
 }
+
+.modal-title, .modal-content, .modal-button {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.2rem; 
+  box-shadow: none
+}
+
+.modal-title {
+  font-weight: 600;  
+}
+
+.modal-content {
+  font-size: 1rem; 
+  line-height: 1.6;  
+}
+
+.modal-button {
+  font-size: 1.1rem; 
+  font-weight: 600;  
+}
